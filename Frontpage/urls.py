@@ -15,4 +15,5 @@ urlpatterns = [
     path('blogs/',views.blogs,name='blogs'),
     path('review/',views.review,name='review'),
     path('<str:category>/<slug:slug>/', views.product_detail, name='product_detail'),
+    path('becomeDealer/', views.becomeDealer, name='becomeDealer'),
 ]

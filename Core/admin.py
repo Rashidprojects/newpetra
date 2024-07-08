@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,PremiumSize
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,PremiumSize,Dealer
 
 # Register your models here.
 
@@ -39,3 +39,7 @@ class PremiumSizeInline(admin.TabularInline):
 class PremiumModelAdmin(admin.ModelAdmin):
     list_display = ['Name','Date','Image']
     inlines = [PremiumSizeInline]
+    
+@admin.register(Dealer)
+class DealerModelAdmin(admin.ModelAdmin):
+    list_display = ['Name','Date','Email','Contact_number','Business','District','State']

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer
 from django.contrib import messages
 from Core.reuse import resize
 from Frontpage.models import Visitor
@@ -571,3 +571,76 @@ def edit_double(request, double_id):
         'sizes': DoubleSize.objects.filter(double=double)
     }
     return render(request, 'Dashboard/Doubles/double-edit.html', context)
+
+#----------------------------------- Manage Dealers -----------------------------------#
+
+@login_required
+def manage_dealers(request):
+    dealers = Dealer.objects.all().order_by('-Date')
+
+    context = {
+        'dealers': dealers
+    }
+    return render(request,'Dashboard/Dealers/dealers.html',context)
+
+#----------------------------------- Add Dealers -----------------------------------#
+
+@login_required
+def add_dealer(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        contact_number = request.POST.get('contact_number')
+        business = request.POST.get('business')
+        address = request.POST.get('address')
+        state = request.POST.get('state')
+        district = request.POST.get('district') 
+
+        try:
+            # resized = resize(image,800)
+            Dealer.objects.create(Name=name,Email=email,Contact_number=contact_number,Business=business,Address=address,State=state,District=district)
+
+            messages.success(request, 'New Dealer Added Successfully ...!')
+            return redirect('manage-dealers')
+        except Exception as exception:
+            messages.warning(request, f'Error: {exception}')
+            return redirect('add-dealer')
+
+    return render(request, 'Dashboard/Dealers/dealer-add.html')
+
+#----------------------------------- Delete Dealers -----------------------------------#
+
+@login_required
+def delete_dealer(request):
+    dealer_id = request.POST.get('dealer_id')
+    dealer = Dealer.objects.get(id=dealer_id)
+    dealer.delete()
+    return redirect('manage-dealers')
+
+#----------------------------------- Edit Dealers -----------------------------------#
+
+@login_required
+def edit_dealer(request, dealer_id):
+    dealer = Dealer.objects.get(id=dealer_id)
+
+    if request.method == 'POST':
+        try:
+            dealer.Name = request.POST.get('name')
+            dealer.Email = request.POST.get('email')
+            dealer.Contact_number = request.POST.get('contact_number')
+            dealer.Business = request.POST.get('business')
+            dealer.State = request.POST.get('state')
+            dealer.District = request.POST.get('district')
+            dealer.save()
+            
+                
+            messages.success(request, 'Dealer details edited successfully!')
+            return redirect('manage-dealers')
+        except Exception as exception:
+            messages.warning(request, exception)
+            return redirect('edit-dealer', dealer_id=dealer.id)
+        
+    context = {
+        'dealer': dealer,
+    }
+    return render(request, 'Dashboard/Dealers/dealer-edit.html', context)

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double
+from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer
 from Frontpage.models import Visitor
 import uuid
 from django.contrib import messages
@@ -160,3 +160,21 @@ def review(request):
             return JsonResponse({'status':'failed'})
         
     return render(request,'Frontpage/review.html')
+
+@csrf_exempt
+def becomeDealer(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        contact_number = request.POST.get('contact_number')
+        business = request.POST.get('business')
+        address = request.POST.get('address')
+        state = request.POST.get('state')
+        district = request.POST.get('district')
+
+        try:
+            Dealer.objects.create(Name=name,Email=email,Contact_number=contact_number,Business=business,Address=address,State=state,District=district)
+            return JsonResponse({'status':'success'})
+        except:
+            return JsonResponse({'status':'failed'})
+    return render(request,'Frontpage/becomeAdealers.html')

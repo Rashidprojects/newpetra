@@ -48,5 +48,11 @@ urlpatterns = [
     path('double/delete/',views.delete_double,name='delete-double'),
     path('double/edit/<int:double_id>/',views.edit_double,name='edit-double'),
     path('doubleSize/delete/',views.delete_doubleSize,name='delete-doubleSize'),
+    
+    path('dealer/list/',views.manage_dealers,name='manage-dealers'),
+    path('dealer/add/',views.add_dealer,name='add-dealer'),
+    path('dealer/delete/',views.delete_dealer,name='delete-dealer'),
+    path('dealer/edit/<int:dealer_id>/',views.edit_dealer,name='edit-dealer'),
+
 
 ]

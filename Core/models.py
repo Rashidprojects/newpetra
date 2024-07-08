@@ -155,3 +155,16 @@ class DoubleSize(models.Model):
     def __str__(self):
         return self.size
     
+class Dealer(models.Model):
+    Date = models.DateField(auto_now_add=True)
+    Name = models.CharField(max_length=100)
+    Email = models.EmailField()
+    Contact_number = models.CharField(max_length=15)
+    Business = models.CharField(max_length=100)
+    Address = models.TextField(null=True,blank=True)
+    State = models.CharField(max_length=50)
+    District = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.Name
+    
