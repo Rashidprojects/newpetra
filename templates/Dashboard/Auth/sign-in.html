@@ -11,13 +11,20 @@
         <meta name="author" content="Kamarudheen">
 
         {% block title %}
-            <title>Login | Active Planet</title>
+            <title>Login | Petra</title>
         {% endblock title %}
 
         <!-- BEGIN: CSS Assets-->
         <link rel="stylesheet" href="{% static 'dashboard/css/app.css' %}" />
         <!-- END: CSS Assets-->
-        
+        <style>
+            .login:before {
+                background-color: rgb(var(--color-dark) / 0.2);
+            }
+            .login:after {
+                background-color: rgb(var(--color-dark) / 1);
+            }
+        </style>
     </head>
     <!-- END: Head -->
     <body class="login">
