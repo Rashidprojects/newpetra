@@ -2,6 +2,25 @@
 {% load static %}
 {% block content %}
 
+<style>
+    .alert {
+        background: #7cfd7c;
+    }
+</style> 
+
+<link rel="stylesheet" href="{% static 'dashboard/frontpage/css/dealer.css' %}" />
+
+ <!-- BEGIN: Notification -->
+ {% if messages %}
+ {% for message in messages %}
+     <div class="intro-y col-span-11 alert alert-{{ message.tags }} alert-dismissible show flex items-center mb-6 mt-5 text-white" role="alert">
+         <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
+         <span>{{ message }}</span>
+     </div>
+ {% endfor %}
+ {% endif %}
+ <!-- BEGIN: Notification -->
+
 <section class="inner-contents">
     <div class=" position-relative">
         <div class="banner-img ">
@@ -31,36 +50,36 @@
             {% csrf_token %}
             <div class="input-section">
                 <div class="input-sp">
-                    <input class="input" id="name" name="name" placeholder="Enter Your Name" type="text">
+                    <input class="input" id="name" name="name" placeholder="Enter Your Name" type="text" autocomplete="off">
                 </div>
             </div>
             <div class="input-section mt-2">
                 <div class="input-sp">
-                    <input class="input" id="email" name="email" placeholder="Enter Your Email" type="text">
+                    <input class="input" id="email" name="email" placeholder="Enter Your Email" type="text" autocomplete="off">
                 </div>
             </div>
             <div class="input-section mt-2">
                 <div class="input-sp">
-                    <input class="input" id="contact_number" name="contact_number" placeholder="Enter Your Contact Number" type="text">
+                    <input class="input" id="contact_number" name="contact_number" placeholder="Enter Your Contact Number" type="text" autocomplete="off">
                 </div>
             </div>
             <div class="input-section mt-2">
                 <div class="input-sp">
-                    <input class="input" id="business" name="business" placeholder="Current Business" type="text">
+                    <input class="input" id="business" name="business" placeholder="Current Business" type="text" autocomplete="off">
                 </div>
             </div>
             <div class="input-section mt-2">
                 <div class="input-sp">
-                    <textarea class="input  pb-5" id="address" name="address" placeholder="Enter Your Address"></textarea>
+                    <textarea class="input  pb-5" id="address" name="address" placeholder="Enter Your Address" autocomplete="off"></textarea>
                 </div>
             </div>
             <div class="input-sp mt-1">
-                    <select id="statesDropdown" id="state" name="state" style="color:gray;">
+                    <select id="statesDropdown" id="state" name="state" style="color:gray;" autocomplete="off">
                         <option class="option" value=" ">SELECT STATE</option>
                     </select>
             </div>
             <div class="input-sp mt-2">
-                <select id="districtsDropdown" id="district" name="district" style="color:gray;">
+                <select id="districtsDropdown" id="district" name="district" style="color:gray;" autocomplete="off">
                     <option value="">SELECT DISTRICT</option>
                 </select>
             </div>
@@ -76,5 +95,20 @@
 </section>
 
 <script src="{% static 'js/states_and_districts.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const alertBox = document.querySelector('.alert');
+            if (alertBox) {
+                alertBox.classList.add('alert-hide');
+                setTimeout(function() {
+                    alertBox.style.display = 'none';
+                }, 500); // Match this with the slideUp animation duration
+            }
+        }, 4000); // 4 seconds
+    });
+</script>
+
 
 {% endblock %}

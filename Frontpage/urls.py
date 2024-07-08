@@ -16,4 +16,5 @@ urlpatterns = [
     path('review/',views.review,name='review'),
     path('<str:category>/<slug:slug>/', views.product_detail, name='product_detail'),
     path('becomeDealer/', views.becomeDealer, name='becomeDealer'),
+    path('findNearDealers/', views.findNearDealers, name='findNearDealers'),
 ]

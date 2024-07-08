@@ -27,17 +27,17 @@
                   Are you looking for expanding your
                   <br> business with us
             </div>
-            <form method = 'GET'>
-                <div class="input-section">
+            <form method = 'GET' action="{% url 'findNearDealers' %}">
+                <div class="input-section mb-3">
                     <div class="input-spy">
-                        <select id="statesDropdown" id="state" name="state">
+                        <select id="statesDropdown" id="state" name="state" autocomplete="off">
                             <option class="option" value=" ">SELECT STATE</option>
                         </select>
                     </div>
                 </div>
-                <div class="input-section">
+                <div class="input-section mb-3">
                     <div class="input-spy">
-                        <select id="districtsDropdown" id="district" name="district">
+                        <select id="districtsDropdown" id="district" name="district" autocomplete="off">
                             <option value="">SELECT DISTRICT</option>
                         </select>
                     </div>
@@ -47,13 +47,6 @@
                     <button class="submit-delers">Submit</button>
                 </div>
             </form>
-
-            <h2>Dealers</h2>
-                <ul>
-                    {% for dealer in dealers %}
-                        <li>{{ dealer.name }} - {{ dealer.business }}</li>
-                    {% endfor %}
-                </ul>
 
         </div>
     </div>

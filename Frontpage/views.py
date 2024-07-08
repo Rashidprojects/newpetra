@@ -174,7 +174,23 @@ def becomeDealer(request):
 
         try:
             Dealer.objects.create(Name=name,Email=email,Contact_number=contact_number,Business=business,Address=address,State=state,District=district)
-            return JsonResponse({'status':'success'})
+            messages.success(request,'Dealer Added Successfully ... !')
+            return redirect('becomeDealer')
         except:
             return JsonResponse({'status':'failed'})
     return render(request,'Frontpage/becomeAdealers.html')
+
+def findNearDealers(request):
+    state = request.GET.get('state')
+    district = request.GET.get('district')
+    if state and district:
+        dealers = Dealer.objects.filter(State=state, District=district)
+    else:
+        dealers = Dealer.objects.none()
+
+    context = {
+        'state': state,
+        'district': district,
+        'dealers': dealers
+    }
+    return render(request, 'Frontpage/findNearDealersResult.html', context)
