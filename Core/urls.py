@@ -63,5 +63,9 @@ urlpatterns = [
     path('complaint/add/',views.add_complaint,name='add-complaint'),
     path('complaint/delete/',views.delete_complaint,name='delete-complaint'),
     path('complaint/edit/<int:complaint_id>/',views.edit_complaint,name='edit-complaint'),
+    
+    path('testimonials/list/',views.manage_testimonials,name='manage-testimonials'),
+    path('testimonials/add/',views.add_testimonials,name='add-testimonials'),
+    path('testimonials/delete/',views.delete_testimonials,name='delete-testimonials'),
 
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty,RegisterComplaint
+from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty,RegisterComplaint,Testimonials
 from Frontpage.models import Visitor
 import uuid
 from django.contrib import messages
@@ -260,3 +260,11 @@ def registerComplaint(request):
 
     print("Rendering registerComplaint.html")
     return render(request, 'Frontpage/registerComplaint.html')
+
+def testimonials(request):
+    videos = Testimonials.objects.all()
+    
+    context = {
+        'videos' : videos,
+    }
+    return render(request, 'Frontpage/testimonials.html',context)

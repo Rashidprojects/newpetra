@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty,RegisterComplaint
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty,RegisterComplaint,Testimonials
 from django.contrib import messages
 from Core.reuse import resize
 from Frontpage.models import Visitor
@@ -804,3 +804,42 @@ def edit_complaint(request, complaint_id):
         'complaint': complaint,
     }
     return render(request, 'Dashboard/Complaints/complaint-edit.html', context)
+
+#----------------------------------- testimonials -----------------------------------#
+
+@login_required
+def manage_testimonials(request):
+    links = Testimonials.objects.all().order_by('-id')
+
+    context = {
+        'links' : links
+    }
+    return render(request,'Dashboard/Gallery/testimonials.html',context)
+
+#----------------------------------- Add Testimonials -----------------------------------#
+
+@login_required
+def add_testimonials(request):
+    if request.method == 'POST':
+        link = request.POST.get('link') 
+        try:
+            # resized = resize(image,800)
+            Testimonials.objects.create(Link=link)
+
+            messages.success(request, 'New Testimonials Added Successfully ...!')
+            return redirect('manage-testimonials')
+        except Exception as exception:
+            messages.warning(request, f'Error: {exception}')
+            return redirect('add-testimonials')
+
+    return render(request, 'Dashboard/Gallery/testimonials-add.html')
+    
+#----------------------------------- Delete Testimonials -----------------------------------#
+
+@login_required
+def delete_testimonials(request):
+    testimonial_id = request.POST.get('testimonial_id')
+    link = Testimonials.objects.get(id=testimonial_id)
+    link.delete()
+    messages.warning(request,'Testimonial Deleted ... !')
+    return redirect('manage-testimonials')

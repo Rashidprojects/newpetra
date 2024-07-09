@@ -190,3 +190,7 @@ class RegisterComplaint(models.Model):
     
     def __str__(self):
         return self.Name
+    
+class Testimonials(models.Model):
+    Date = models.DateField(auto_now_add=True)
+    Link = models.CharField(max_length=300)
