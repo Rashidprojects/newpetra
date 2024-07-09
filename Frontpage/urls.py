@@ -18,4 +18,5 @@ urlpatterns = [
     path('becomeDealer/', views.becomeDealer, name='becomeDealer'),
     path('findNearDealers/', views.findNearDealers, name='findNearDealers'),
     path('registerWarranty/', views.registerWarranty, name='registerWarranty'),
+    path('registerComplaint/', views.registerComplaint, name='registerComplaint'),
 ]

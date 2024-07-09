@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty,RegisterComplaint
 from django.contrib import messages
 from Core.reuse import resize
 from Frontpage.models import Visitor
@@ -722,3 +722,85 @@ def edit_warranty(request, warranty_id):
         'warranty': warranty,
     }
     return render(request, 'Dashboard/Warrantys/warranty-edit.html', context)
+
+#----------------------------------- Manage Complaints -----------------------------------#
+
+@login_required
+def manage_complaints(request):
+    complaints = RegisterComplaint.objects.all().order_by('-Date')
+
+    context = {
+        'complaints': complaints
+    }
+    return render(request,'Dashboard/Complaints/complaints.html',context)
+
+#----------------------------------- Add Complaint -----------------------------------#
+
+@login_required
+def add_complaint(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        contact = request.POST.get('contact')
+        warranty = request.POST.get('warranty')
+        dealer = request.POST.get('dealer')
+        description = request.POST.get('description')
+
+        if not RegisterWarranty.objects.filter(Warranty=warranty).exists():
+            messages.error(request, 'Warranty with this value does not exist.')
+            print("Error: Warranty with this value already exists.")  # Debug statement
+        else:
+            try:
+                RegisterComplaint.objects.create(
+                    Name=name,
+                    Address=address,
+                    Contact=contact,
+                    Warranty=warranty,
+                    Dealer=dealer,
+                    Description=description
+                )
+                messages.success(request, 'Complaint registered successfully.')
+                return redirect('manage-complaints')
+            except Exception as exception:
+                messages.warning(request, f'Error: {exception}')
+                return redirect('add-complaint')
+
+    return render(request, 'Dashboard/Complaints/complaint-add.html')
+
+#----------------------------------- Delete Complaint -----------------------------------#
+
+@login_required
+def delete_complaint(request):
+    complaint_id = request.POST.get('complaint_id')
+    complaint = RegisterComplaint.objects.get(id=complaint_id)
+    complaint.delete()
+    return redirect('manage-complaints')
+
+#----------------------------------- Edit Complaint -----------------------------------#
+
+@login_required
+def edit_complaint(request, complaint_id):
+    complaint = RegisterComplaint.objects.get(id=complaint_id)
+
+    if request.method == 'POST':
+        try:
+            complaint.Name = request.POST.get('name')
+            complaint.Address = request.POST.get('address')
+            complaint.Contact = request.POST.get('contact')
+            complaint.Warranty = request.POST.get('warranty')
+            complaint.Dealer = request.POST.get('dealer')
+            complaint.Description = request.POST.get('description')
+
+            complaint.save()
+            
+                
+            messages.success(request, 'Complaint details edited successfully!')
+            return redirect('manage-complaints')
+        except Exception as exception:
+            messages.warning(request, exception)
+            return redirect('edit-complaint', complaint_id=complaint.id)
+        
+    context = {
+        'complaint': complaint,
+    }
+    return render(request, 'Dashboard/Complaints/complaint-edit.html', context)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,PremiumSize,Dealer,RegisterWarranty
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,PremiumSize,Dealer,RegisterWarranty,RegisterComplaint
 
 # Register your models here.
 
@@ -47,3 +47,7 @@ class DealerModelAdmin(admin.ModelAdmin):
 @admin.register(RegisterWarranty)
 class RegisterWarrantyModelAdmin(admin.ModelAdmin):
     list_display = ['Name','Date','Contact','Address','Warranty','Dealer']
+    
+@admin.register(RegisterComplaint)
+class RegisterComplaintModelAdmin(admin.ModelAdmin):
+    list_display = ['Name','Date','Contact','Address','Warranty','Dealer','Description']

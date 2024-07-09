@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty
+from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty,RegisterComplaint
 from Frontpage.models import Visitor
 import uuid
 from django.contrib import messages
@@ -225,3 +225,38 @@ def registerWarranty(request):
 
     print("Rendering registerWarranty.html")  # Debug statement
     return render(request, 'Frontpage/registerWarranty.html')
+
+@csrf_exempt
+def registerComplaint(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        contact = request.POST.get('contact')
+        warranty = request.POST.get('warranty')
+        dealer = request.POST.get('dealer')
+        description = request.POST.get('description')
+
+        # Check if the warranty does not exist
+        print(f"Checking for warranty: {warranty}")
+        if not RegisterWarranty.objects.filter(Warranty=warranty).exists():
+            messages.error(request, 'Warranty with this value does not exist.')
+            print("Error: Warranty with this value does not exist.")
+        else:
+            try:
+                RegisterComplaint.objects.create(
+                    Name=name,
+                    Address=address,
+                    Contact=contact,
+                    Warranty=warranty,
+                    Dealer=dealer,
+                    Description=description
+                )
+                messages.success(request, 'Complaint registered successfully.')
+                print("Success: Complaint registered successfully.")
+                return redirect('registerComplaint')
+            except Exception as e:
+                print(f"Exception: {e}")
+                return JsonResponse({'status': 'failed', 'error': str(e)})
+
+    print("Rendering registerComplaint.html")
+    return render(request, 'Frontpage/registerComplaint.html')

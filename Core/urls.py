@@ -58,5 +58,10 @@ urlpatterns = [
     path('warranty/add/',views.add_warranty,name='add-warranty'),
     path('warranty/delete/',views.delete_warranty,name='delete-warranty'),
     path('warranty/edit/<int:warranty_id>/',views.edit_warranty,name='edit-warranty'),
+    
+    path('complaint/list/',views.manage_complaints,name='manage-complaints'),
+    path('complaint/add/',views.add_complaint,name='add-complaint'),
+    path('complaint/delete/',views.delete_complaint,name='delete-complaint'),
+    path('complaint/edit/<int:complaint_id>/',views.edit_complaint,name='edit-complaint'),
 
 ]
