@@ -268,3 +268,11 @@ def testimonials(request):
         'videos' : videos,
     }
     return render(request, 'Frontpage/testimonials.html',context)
+
+def gallery(request):
+    images = Gallery_Image.objects.all()
+    
+    context = {
+        'images' : images,
+    }
+    return render(request, 'Frontpage/gallery.html',context)
