@@ -168,3 +168,13 @@ class Dealer(models.Model):
     def __str__(self):
         return self.Name
     
+class RegisterWarranty(models.Model):
+    Date = models.DateField(auto_now_add=True)
+    Name = models.CharField(max_length=100)
+    Address = models.TextField(null=True,blank=True)
+    Contact = models.CharField(max_length=15)
+    Warranty = models.CharField(max_length=100,unique=True)
+    Dealer = models.TextField(null=True,blank=True)
+    
+    def __str__(self):
+        return self.Name

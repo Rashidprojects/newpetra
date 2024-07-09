@@ -17,4 +17,5 @@ urlpatterns = [
     path('<str:category>/<slug:slug>/', views.product_detail, name='product_detail'),
     path('becomeDealer/', views.becomeDealer, name='becomeDealer'),
     path('findNearDealers/', views.findNearDealers, name='findNearDealers'),
+    path('registerWarranty/', views.registerWarranty, name='registerWarranty'),
 ]

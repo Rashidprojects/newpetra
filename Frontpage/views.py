@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer
+from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty
 from Frontpage.models import Visitor
 import uuid
 from django.contrib import messages
@@ -194,3 +194,34 @@ def findNearDealers(request):
         'dealers': dealers
     }
     return render(request, 'Frontpage/findNearDealersResult.html', context)
+
+@csrf_exempt
+def registerWarranty(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        contact = request.POST.get('contact')
+        warranty = request.POST.get('warranty')
+        dealer = request.POST.get('dealer')
+
+        if RegisterWarranty.objects.filter(Warranty=warranty).exists():
+            messages.error(request, 'Warranty with this value already exists.')
+            print("Error: Warranty with this value already exists.")  # Debug statement
+        else:
+            try:
+                RegisterWarranty.objects.create(
+                    Name=name,
+                    Address=address,
+                    Contact=contact,
+                    Warranty=warranty,
+                    Dealer=dealer
+                )
+                messages.success(request, 'Warranty registered successfully.')
+                print("Success: Warranty registered successfully.")  # Debug statement
+                return redirect('registerWarranty')
+            except Exception as e:
+                print(f"Exception: {e}")  # Debug statement
+                return JsonResponse({'status': 'failed'}, f'An error occurred: {e}')
+
+    print("Rendering registerWarranty.html")  # Debug statement
+    return render(request, 'Frontpage/registerWarranty.html')

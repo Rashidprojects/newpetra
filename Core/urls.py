@@ -53,6 +53,10 @@ urlpatterns = [
     path('dealer/add/',views.add_dealer,name='add-dealer'),
     path('dealer/delete/',views.delete_dealer,name='delete-dealer'),
     path('dealer/edit/<int:dealer_id>/',views.edit_dealer,name='edit-dealer'),
-
+    
+    path('warranty/list/',views.manage_warrantys,name='manage-warrantys'),
+    path('warranty/add/',views.add_warranty,name='add-warranty'),
+    path('warranty/delete/',views.delete_warranty,name='delete-warranty'),
+    path('warranty/edit/<int:warranty_id>/',views.edit_warranty,name='edit-warranty'),
 
 ]

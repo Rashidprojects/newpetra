@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty
 from django.contrib import messages
 from Core.reuse import resize
 from Frontpage.models import Visitor
@@ -644,3 +644,81 @@ def edit_dealer(request, dealer_id):
         'dealer': dealer,
     }
     return render(request, 'Dashboard/Dealers/dealer-edit.html', context)
+
+#----------------------------------- Manage Warrantys -----------------------------------#
+
+@login_required
+def manage_warrantys(request):
+    warrantys = RegisterWarranty.objects.all().order_by('-Date')
+
+    context = {
+        'warrantys': warrantys
+    }
+    return render(request,'Dashboard/Warrantys/warrantys.html',context)
+
+#----------------------------------- Add Warranty -----------------------------------#
+
+@login_required
+def add_warranty(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        contact = request.POST.get('contact')
+        warranty = request.POST.get('warranty')
+        dealer = request.POST.get('dealer')
+
+        if RegisterWarranty.objects.filter(Warranty=warranty).exists():
+            messages.error(request, 'Warranty with this value already exists.')
+            print("Error: Warranty with this value already exists.")  # Debug statement
+        else:
+            try:
+                RegisterWarranty.objects.create(
+                    Name=name,
+                    Address=address,
+                    Contact=contact,
+                    Warranty=warranty,
+                    Dealer=dealer
+                )
+                messages.success(request, 'Warranty registered successfully.')
+                return redirect('manage-warrantys')
+            except Exception as exception:
+                messages.warning(request, f'Error: {exception}')
+                return redirect('add-warranty')
+
+    return render(request, 'Dashboard/Warrantys/warranty-add.html')
+
+#----------------------------------- Delete Warranty -----------------------------------#
+
+@login_required
+def delete_warranty(request):
+    warranty_id = request.POST.get('warranty_id')
+    warranty = RegisterWarranty.objects.get(id=warranty_id)
+    warranty.delete()
+    return redirect('manage-warrantys')
+
+#----------------------------------- Edit Warranty -----------------------------------#
+
+@login_required
+def edit_warranty(request, warranty_id):
+    warranty = RegisterWarranty.objects.get(id=warranty_id)
+
+    if request.method == 'POST':
+        try:
+            warranty.Name = request.POST.get('name')
+            warranty.Address = request.POST.get('address')
+            warranty.Contact = request.POST.get('contact')
+            warranty.Warranty = request.POST.get('warranty')
+            warranty.Dealer = request.POST.get('dealer')
+            warranty.save()
+            
+                
+            messages.success(request, 'Warranty details edited successfully!')
+            return redirect('manage-warrantys')
+        except Exception as exception:
+            messages.warning(request, exception)
+            return redirect('edit-warranty', warranty_id=warranty.id)
+        
+    context = {
+        'warranty': warranty,
+    }
+    return render(request, 'Dashboard/Warrantys/warranty-edit.html', context)
