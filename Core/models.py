@@ -46,9 +46,11 @@ class Review(models.Model):
 
 class Enquiry(models.Model):
     Date = models.DateField(auto_now_add=True)
+    Email = models.EmailField(max_length=100)
     Name = models.CharField(max_length=100)
+    Place = models.CharField(max_length=100)
     Mobile = models.CharField(max_length=20,null=True)
-    Description = models.TextField()
+    Message = models.TextField()
 
 class Premium(models.Model):
     Date = models.DateField(auto_now_add=True)

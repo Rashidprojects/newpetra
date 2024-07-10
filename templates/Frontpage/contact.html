@@ -4,6 +4,27 @@
 <link rel="stylesheet" href="{%static 'style/contactus.css' %}">
 {% endblock %}
 {% block content %}
+
+<style>
+    .alert-success {
+        background: #84cc16;
+    }
+    .alert-error {
+        background: #ff3a3a;
+    }
+</style> 
+
+ <!-- BEGIN: Notification -->
+ {% if messages %}
+ {% for message in messages %}
+     <div class="intro-y col-span-11 alert alert-{{ message.tags }} alert-dismissible show flex items-center mb-6 mt-5 text-white" role="alert">
+         <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
+         <span>{{ message }}</span>
+     </div>
+ {% endfor %}
+ {% endif %}
+ <!-- BEGIN: Notification -->
+
 <!-- Page Header Start here -->
 <section class="inner-contents">
   <div class=" position-relative">
@@ -98,7 +119,7 @@
           <span class="circle one"></span>
           <span class="circle two"></span>
 
-          <form method='post' action="" autocomplete="off">
+          <form method='post' action="{% url 'contact' %}" autocomplete="off">
               {% csrf_token %}
               <h3 class="title">Contact us</h3>
               <div class="input-container mt-4">
@@ -114,7 +135,7 @@
                   <span>Place</span>
               </div>
               <div class="input-container">
-                  <input type="tel" placeholder="Phone" name="phone" class="inputContact" />
+                  <input type="tel" placeholder="Phone" name="mobile" class="inputContact" />
                   <span>Phone</span>
               </div>
               <div class="input-container textarea">
@@ -147,6 +168,38 @@
       input.addEventListener("blur", blurFunc);
   });
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const alertBox = document.querySelector('.alert');
+            if (alertBox) {
+                alertBox.classList.add('alert-hide');
+                setTimeout(function() {
+                    alertBox.style.display = 'none';
+                }, 500); // Match this with the slideUp animation duration
+            }
+        }, 4000); // 4 seconds
+    });
+
+    // Clear messages from session storage after displaying them
+    document.addEventListener('DOMContentLoaded', function() {
+        if (sessionStorage.getItem('form_submitted')) {
+            sessionStorage.removeItem('form_submitted');
+        } else {
+            const alertBox = document.querySelector('.alert');
+            if (alertBox) {
+                alertBox.style.display = 'none';
+            }
+        }
+
+        // Set session storage to indicate form was submitted
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function() {
+            sessionStorage.setItem('form_submitted', 'true');
+        });
+    });
 </script>
 
 {% endblock content %}

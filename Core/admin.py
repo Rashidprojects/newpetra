@@ -29,7 +29,7 @@ class ReviewModelAdmin(admin.ModelAdmin):
 
 @admin.register(Enquiry)
 class EnquiryModelAdmin(admin.ModelAdmin):
-    list_display = ['Name','Date','Mobile','Description']
+    list_display = ['Name','Date','Mobile','Email','Message','Place']
     
 class PremiumSizeInline(admin.TabularInline):
     model = PremiumSize

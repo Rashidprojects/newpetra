@@ -106,12 +106,15 @@ def blogs(request):
 def contact(request):
     if request.method == 'POST':
         name = request.POST.get('name')
+        email = request.POST.get('email')
+        place = request.POST.get('place')
         mobile = request.POST.get('mobile')
-        description = request.POST.get('description')
+        message = request.POST.get('message')
 
         try:
-            Enquiry.objects.create(Name=name,Mobile=mobile,Description=description)
-            return JsonResponse({'status':'success'})
+            Enquiry.objects.create(Name=name,Email=email,Place=place,Mobile=mobile,Message=message)
+            messages.success(request, 'Your enquiry submitted successfully.')
+            return redirect('contact')
         except:
             return JsonResponse({'status':'failed'})
     return render(request,'Frontpage/contact.html')
