@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty,RegisterComplaint,Testimonials
+from Core.models import Banner,Gallery_Image,Partners,Event,Review,Enquiry,Schools,Premium,Single,Double,PremiumSize,SingleSize,DoubleSize,Dealer,RegisterWarranty,RegisterComplaint,Testimonials,Blogs
 from django.contrib import messages
 from Core.reuse import resize
 from Frontpage.models import Visitor
@@ -843,3 +843,74 @@ def delete_testimonials(request):
     link.delete()
     messages.warning(request,'Testimonial Deleted ... !')
     return redirect('manage-testimonials')
+
+#----------------------------------- Manage Blogs -----------------------------------#
+
+@login_required
+def manage_blogs(request):
+    blogs = Blogs.objects.all().order_by('-Date')
+
+    context = {
+        'blogs': blogs
+    }
+    return render(request,'Dashboard/Blogs/blogs.html',context)
+
+#----------------------------------- Add Blogs -----------------------------------#
+
+@login_required
+def add_blog(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        image = request.FILES.get('image')
+        desc = request.POST.get('desc')
+        content = request.POST.get('content')
+        
+
+        try:
+            # resized = resize(image,800)
+            blog = Blogs.objects.create(Title=title, Image=image, Description=desc,Content=content)
+
+            messages.success(request, 'New blog added successfully ...!')
+            return redirect('manage-blogs')
+        except Exception as exception:
+            messages.warning(request, f'Error: {exception}')
+            return redirect('add-blog')
+
+    return render(request, 'Dashboard/Blogs/blog-add.html')
+
+#----------------------------------- Delete Blog -----------------------------------#
+
+@login_required
+def delete_blog(request):
+    blog_id = request.POST.get('blog_id')
+    blog = Blogs.objects.get(id=blog_id)
+    blog.delete()
+    return redirect('manage-blogs')
+
+
+#----------------------------------- Edit Blogs -----------------------------------#
+
+@login_required
+def edit_blog(request, blog_id):
+    blog = Blogs.objects.get(id=blog_id)
+
+    if request.method == 'POST':
+        try:
+            if 'image' in request.FILES:
+                blog.Image = request.FILES.get('image')
+
+            blog.Title = request.POST.get('title')
+            blog.Description = request.POST.get('desc')
+            blog.Content = request.POST.get('content')
+            blog.save()
+                
+            messages.success(request, 'Blog details edited successfully!')
+            return redirect('manage-blogs')
+        except Exception as exception:
+            messages.warning(request, exception)
+            return redirect('edit-blog', blog_id=blog.id)
+        
+    context = {
+        'blog': blog,
+    }
+    return render(request, 'Dashboard/Blogs/blog-edit.html', context)

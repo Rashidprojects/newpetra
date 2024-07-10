@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty,RegisterComplaint,Testimonials
+from Core.models import Banner,Gallery_Image,Review,Enquiry,Partners,Event,Schools,Premium,Single,Double,Dealer,RegisterWarranty,RegisterComplaint,Testimonials,Blogs
 from Frontpage.models import Visitor
 import uuid
 from django.contrib import messages
@@ -276,3 +276,20 @@ def gallery(request):
         'images' : images,
     }
     return render(request, 'Frontpage/gallery.html',context)
+
+def blogs(request):
+    blogs = Blogs.objects.all().order_by('-id')
+    
+    context = {
+        'blogs' : blogs,
+    }
+    return render(request, 'Frontpage/blogs.html',context)
+
+def blog_detail(request, category, slug):
+    if category == 'blog':
+        blog = get_object_or_404(Blogs, slug=slug)
+    else:
+        blog = None
+
+
+    return render(request, 'Frontpage/blog_detail.html', {'blog': blog})

@@ -194,3 +194,30 @@ class RegisterComplaint(models.Model):
 class Testimonials(models.Model):
     Date = models.DateField(auto_now_add=True)
     Link = models.CharField(max_length=300)
+    
+class Blogs(models.Model):
+    Date = models.DateField(auto_now_add=True)
+    Title = models.CharField(max_length=100)
+    Image = models.ImageField(null=True,upload_to='Blogs')
+    Description = models.TextField(null=True, blank=True)
+    Content = models.TextField(null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True)
+    
+    class Meta:
+        ordering = ['Title']
+        verbose_name = 'blog'
+        verbose_name_plural = 'blogs'
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.Title)
+            slug = base_slug
+            counter = 1
+            while Blogs.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def get_url(self):
+        return reverse('blog_detail', args=['blog', self.slug])

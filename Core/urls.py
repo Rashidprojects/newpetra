@@ -67,5 +67,10 @@ urlpatterns = [
     path('testimonials/list/',views.manage_testimonials,name='manage-testimonials'),
     path('testimonials/add/',views.add_testimonials,name='add-testimonials'),
     path('testimonials/delete/',views.delete_testimonials,name='delete-testimonials'),
+    
+    path('blog/list/',views.manage_blogs,name='manage-blogs'),
+    path('blog/add/',views.add_blog,name='add-blog'),
+    path('blog/delete/',views.delete_blog,name='delete-blog'),
+    path('blog/edit/<int:blog_id>/',views.edit_blog,name='edit-blog'),
 
 ]
